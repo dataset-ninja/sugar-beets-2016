@@ -1,43 +1,51 @@
 from typing import Dict, List, Optional, Union
 
-from dataset_tools.templates import AnnotationType, CVTask, Industry, Domain, Research, License, Category
+from dataset_tools.templates import (
+    AnnotationType,
+    Category,
+    CVTask,
+    Domain,
+    Industry,
+    License,
+    Research,
+)
 
 ##################################
 # * Before uploading to instance #
 ##################################
-PROJECT_NAME: str = None
-PROJECT_NAME_FULL: str = None
+PROJECT_NAME: str = "Sugar Beets 2016"
+PROJECT_NAME_FULL: str = "Sugar Beets 2016"
 
 ##################################
 # * After uploading to instance ##
 ##################################
-LICENSE: License = None
-APPLICATIONS: List[Union[Industry, Domain, Research]] = None
-CATEGORY: Category = None
+LICENSE: License = License.CC_BY_SA_4_0()
+APPLICATIONS: List[Union[Industry, Domain, Research]] = [Domain.Industrial()]
+CATEGORY: Category = Category.Agriculture()
 
-CV_TASKS: List[CVTask] = None
-ANNOTATION_TYPES: List[AnnotationType] = None
+CV_TASKS: List[CVTask] = [CVTask.SemanticSegmentation(), CVTask.InstanceSegmentation()]
+ANNOTATION_TYPES: List[AnnotationType] = [AnnotationType.InstanceSegmentation()]
 
 RELEASE_DATE: Optional[str] = None  # e.g. "YYYY-MM-DD"
 if RELEASE_DATE is None:
-    RELEASE_YEAR: int = None
+    RELEASE_YEAR: int = 2016
 
-HOMEPAGE_URL: str = None
+HOMEPAGE_URL: str = "https://www.ipb.uni-bonn.de/data/sugarbeets2016/"
 # e.g. "https://some.com/dataset/homepage"
 
-PREVIEW_IMAGE_ID: int = None
+PREVIEW_IMAGE_ID: int = 1718786
 # This should be filled AFTER uploading images to instance, just ID of any image.
 
-GITHUB_URL: str = None
+GITHUB_URL: str = "https://github.com/dataset-ninja/sugar-beets-2016"
 # URL to GitHub repo on dataset ninja (e.g. "https://github.com/dataset-ninja/some-dataset")
 
 ##################################
 ### * Optional after uploading ###
 ##################################
-DOWNLOAD_ORIGINAL_URL: Optional[Union[str, dict]] = None
+DOWNLOAD_ORIGINAL_URL: Optional[Union[str, dict]] = "https://www.ipb.uni-bonn.de/datasets_IJRR2017"
 # Optional link for downloading original dataset (e.g. "https://some.com/dataset/download")
 
-CLASS2COLOR: Optional[Dict[str, List[str]]] = None
+CLASS2COLOR: Optional[Dict[str, List[str]]] = {"sugar beet": [0, 255, 0], "weed": [255, 0, 0]}
 # If specific colors for classes are needed, fill this dict (e.g. {"class1": [255, 0, 0], "class2": [0, 255, 0]})
 
 # If you have more than the one paper, put the most relatable link as the first element of the list
