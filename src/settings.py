@@ -14,14 +14,15 @@ from dataset_tools.templates import (
 # * Before uploading to instance #
 ##################################
 PROJECT_NAME: str = "Sugar Beets 2016"
-PROJECT_NAME_FULL: str = "Sugar Beets 2016"
+PROJECT_NAME_FULL: str = "Sugar Beets 2016: Agricultural Robot Dataset for Plant Classification, Localization and Mapping on Sugar Beet Fields"
+HIDE_DATASET = True  # set False when 100% sure about repo quality
 
 ##################################
 # * After uploading to instance ##
 ##################################
 LICENSE: License = License.CC_BY_SA_4_0()
-APPLICATIONS: List[Union[Industry, Domain, Research]] = [Domain.Industrial()]
-CATEGORY: Category = Category.Agriculture()
+APPLICATIONS: List[Union[Industry, Domain, Research]] = [Industry.Agricultural()]
+CATEGORY: Category = Category.Agriculture(extra=Category.Robotics())
 
 CV_TASKS: List[CVTask] = [CVTask.SemanticSegmentation(), CVTask.InstanceSegmentation()]
 ANNOTATION_TYPES: List[AnnotationType] = [AnnotationType.InstanceSegmentation()]
@@ -33,7 +34,7 @@ if RELEASE_DATE is None:
 HOMEPAGE_URL: str = "https://www.ipb.uni-bonn.de/data/sugarbeets2016/"
 # e.g. "https://some.com/dataset/homepage"
 
-PREVIEW_IMAGE_ID: int = 1718786
+PREVIEW_IMAGE_ID: int = 4265981
 # This should be filled AFTER uploading images to instance, just ID of any image.
 
 GITHUB_URL: str = "https://github.com/dataset-ninja/sugar-beets-2016"
@@ -45,16 +46,34 @@ GITHUB_URL: str = "https://github.com/dataset-ninja/sugar-beets-2016"
 DOWNLOAD_ORIGINAL_URL: Optional[Union[str, dict]] = "https://www.ipb.uni-bonn.de/datasets_IJRR2017"
 # Optional link for downloading original dataset (e.g. "https://some.com/dataset/download")
 
-CLASS2COLOR: Optional[Dict[str, List[str]]] = {"sugar beet": [0, 255, 0], "weed": [255, 0, 0]}
+CLASS2COLOR: Optional[Dict[str, List[str]]] = {"sugar beet": [255, 0, 255], "weed": [255, 0, 0]}
 # If specific colors for classes are needed, fill this dict (e.g. {"class1": [255, 0, 0], "class2": [0, 255, 0]})
 
 # If you have more than the one paper, put the most relatable link as the first element of the list
-PAPER: Optional[Union[str, List[str]]] = None
-CITATION_URL: Optional[str] = None
-AUTHORS: Optional[List[str]] = None
+PAPER: Optional[
+    Union[str, List[str]]
+] = "https://journals.sagepub.com/doi/full/10.1177/0278364917720510"
+BLOGPOST: Optional[Union[str, List[str], Dict[str, str]]] = None
+REPOSITORY: Optional[Union[str, List[str], Dict[str, str]]] = None
 
-ORGANIZATION_NAME: Optional[Union[str, List[str]]] = None
-ORGANIZATION_URL: Optional[Union[str, List[str]]] = None
+CITATION_URL: Optional[str] = None
+AUTHORS: Optional[List[str]] = [
+    "Nived Chebrolu",
+    "Philipp Lottes",
+    "Alexander Schaefer",
+    "Wera Winterhalter",
+    "Wolfram Burgard",
+    "Cyrill Stachniss",
+]
+
+ORGANIZATION_NAME: Optional[Union[str, List[str]]] = [
+    "University of Bonn, Germany",
+    "University of Freiburg, Germany",
+]
+ORGANIZATION_URL: Optional[Union[str, List[str]]] = [
+    "https://www.uni-bonn.de/en/university/university",
+    "https://uni-freiburg.de/en/",
+]
 
 SLYTAGSPLIT: Optional[Dict[str, List[str]]] = None
 TAGS: Optional[List[str]] = None
@@ -78,6 +97,7 @@ def get_settings():
     settings = {
         "project_name": PROJECT_NAME,
         "license": LICENSE,
+        "hide_dataset": HIDE_DATASET,
         "applications": APPLICATIONS,
         "category": CATEGORY,
         "cv_tasks": CV_TASKS,
@@ -96,6 +116,8 @@ def get_settings():
     settings["download_original_url"] = DOWNLOAD_ORIGINAL_URL
     settings["class2color"] = CLASS2COLOR
     settings["paper"] = PAPER
+    settings["blog"] = BLOGPOST
+    settings["repository"] = REPOSITORY
     settings["citation_url"] = CITATION_URL
     settings["authors"] = AUTHORS
     settings["organization_name"] = ORGANIZATION_NAME

@@ -1,11 +1,15 @@
+# https://www.ipb.uni-bonn.de/data/sugarbeets2016/
+
 import os
 import shutil
 from urllib.parse import unquote, urlparse
 
+import cv2
 import numpy as np
 import supervisely as sly
 from cv2 import connectedComponents
 from dataset_tools.convert import unpack_if_archive
+from dotenv import load_dotenv
 from supervisely.io.fs import (
     dir_exists,
     file_exists,
@@ -66,13 +70,14 @@ def download_dataset(teamfiles_dir: str) -> str:
 def convert_and_upload_supervisely_project(
     api: sly.Api, workspace_id: int, project_name: str
 ) -> sly.ProjectInfo:
-    ### Function should read local dataset and upload it to Supervisely project, then return project info.###
-    dataset_path = "/home/alex/DATASETS/TODO/Sugar Beets 2016/ijrr_sugarbeets_2016_annotations"
+    # project_name = "Sugar Beets 2016"
+    dataset_path = "/mnt/d/datasetninja-raw/sugar-beets-2016/ijrr_sugarbeets_2016_annotations/ijrr_sugarbeets_2016_annotations"
     ds_name = "ds"
     images_subpath = "images/rgb"
     masks_subpath = "annotations/dlp/colorCleaned"
     images_shape = (1296, 966)
     batch_size = 30
+    ds_name = "ds"
 
     colors = []
 
@@ -92,6 +97,13 @@ def convert_and_upload_supervisely_project(
 
     def create_ann(image_path):
         labels = []
+        tag_location = sly.Tag(location, value="Campus Klein Altendorf")
+        tags = [tag_location]
+
+        date_value = subfolder.split("_")[1]
+        if date_value != "weed":
+            tag_date = sly.Tag(date, value=date_value)
+            tags.append(tag_date)
 
         mask_path = os.path.join(masks_path, get_file_name_with_ext(image_path))
         if file_exists(mask_path):
@@ -111,28 +123,37 @@ def convert_and_upload_supervisely_project(
                         label = sly.Label(bitmap, obj_class)
                         labels.append(label)
 
-        return sly.Annotation(img_size=(images_shape[1], images_shape[0]), labels=labels)
+        return sly.Annotation(
+            img_size=(images_shape[1], images_shape[0]), labels=labels, img_tags=tags
+        )
 
     color_to_obj_class = {
         (0, 255, 0): sly.ObjClass("sugar beet", sly.Bitmap, color=(0, 255, 0)),
         (255, 0, 0): sly.ObjClass("weed", sly.Bitmap, color=(255, 0, 0)),
     }
 
+    location = sly.TagMeta("location", sly.TagValueType.ANY_STRING)
+    date = sly.TagMeta("date", sly.TagValueType.ANY_STRING)
+
     project = api.project.create(workspace_id, project_name, change_name_if_conflict=True)
 
-    meta = sly.ProjectMeta(obj_classes=list(color_to_obj_class.values()))
+    meta = sly.ProjectMeta(
+        obj_classes=list(color_to_obj_class.values()), tag_metas=[location, date]
+    )
     api.project.update_meta(project.id, meta.to_json())
 
-    for ds_name in os.listdir(dataset_path):
-        curr_folder_path = os.path.join(dataset_path, ds_name)
-        if dir_exists(curr_folder_path):
-            dataset = api.dataset.create(project.id, ds_name, change_name_if_conflict=True)
+    dataset = api.dataset.create(project.id, ds_name, change_name_if_conflict=True)
 
+    for subfolder in os.listdir(dataset_path):
+        curr_folder_path = os.path.join(dataset_path, subfolder)
+        if dir_exists(curr_folder_path):
             images_path = os.path.join(curr_folder_path, images_subpath)
             masks_path = os.path.join(curr_folder_path, masks_subpath)
             images_names = os.listdir(images_path)
 
-            progress = sly.Progress("Create dataset {}".format(ds_name), len(images_names))
+            progress = sly.Progress(
+                "Create dataset {}, add {} data".format(ds_name, subfolder), len(images_names)
+            )
 
             for images_names_batch in sly.batched(images_names, batch_size=batch_size):
                 images_path_batch = [
@@ -148,5 +169,4 @@ def convert_and_upload_supervisely_project(
                 api.annotation.upload_anns(img_ids, anns_batch)
 
                 progress.iters_done_report(len(images_path_batch))
-
     return project
