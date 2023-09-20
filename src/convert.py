@@ -72,12 +72,14 @@ def convert_and_upload_supervisely_project(
 ) -> sly.ProjectInfo:
     # project_name = "Sugar Beets 2016"
     dataset_path = "/mnt/d/datasetninja-raw/sugar-beets-2016/ijrr_sugarbeets_2016_annotations/ijrr_sugarbeets_2016_annotations"
-    ds_name = "ds"
+
     images_subpath = "images/rgb"
+    nir_subpath = "images/nir"
     masks_subpath = "annotations/dlp/colorCleaned"
     images_shape = (1296, 966)
     batch_size = 30
     ds_name = "ds"
+    group_tag_name = "im_id"
 
     colors = []
 
@@ -97,8 +99,14 @@ def convert_and_upload_supervisely_project(
 
     def create_ann(image_path):
         labels = []
+        tags = []
+
+        id_data = get_file_name(image_path)
+        group_id = sly.Tag(tag_id, value=id_data)
+        tags.append(group_id)
+
         tag_location = sly.Tag(location, value="Campus Klein Altendorf")
-        tags = [tag_location]
+        tags.append(tag_location)
 
         date_value = subfolder.split("_")[1]
         if date_value != "weed":
@@ -134,13 +142,18 @@ def convert_and_upload_supervisely_project(
 
     location = sly.TagMeta("location", sly.TagValueType.ANY_STRING)
     date = sly.TagMeta("date", sly.TagValueType.ANY_STRING)
+    tag_id = sly.TagMeta("im_id", sly.TagValueType.ANY_STRING)
+
+    group_tag_meta = sly.TagMeta(group_tag_name, sly.TagValueType.ANY_STRING)
 
     project = api.project.create(workspace_id, project_name, change_name_if_conflict=True)
 
     meta = sly.ProjectMeta(
         obj_classes=list(color_to_obj_class.values()), tag_metas=[location, date]
     )
+    meta = meta.add_tag_meta(group_tag_meta)
     api.project.update_meta(project.id, meta.to_json())
+    api.project.images_grouping(id=project.id, enable=True, tag_name=group_tag_name)
 
     dataset = api.dataset.create(project.id, ds_name, change_name_if_conflict=True)
 
@@ -148,25 +161,33 @@ def convert_and_upload_supervisely_project(
         curr_folder_path = os.path.join(dataset_path, subfolder)
         if dir_exists(curr_folder_path):
             images_path = os.path.join(curr_folder_path, images_subpath)
+            nir_path = os.path.join(curr_folder_path, nir_subpath)
             masks_path = os.path.join(curr_folder_path, masks_subpath)
-            images_names = os.listdir(images_path)
+            for curr_images_path in [images_path, nir_path]:
+                images_names = os.listdir(curr_images_path)
 
-            progress = sly.Progress(
-                "Create dataset {}, add {} data".format(ds_name, subfolder), len(images_names)
-            )
-
-            for images_names_batch in sly.batched(images_names, batch_size=batch_size):
-                images_path_batch = [
-                    os.path.join(images_path, image_name) for image_name in images_names_batch
-                ]
-
-                img_infos = api.image.upload_paths(
-                    dataset.id, images_names_batch, images_path_batch
+                progress = sly.Progress(
+                    "Create dataset {}, add {} data".format(ds_name, subfolder), len(images_names)
                 )
-                img_ids = [im_info.id for im_info in img_infos]
 
-                anns_batch = [create_ann(image_path) for image_path in images_path_batch]
-                api.annotation.upload_anns(img_ids, anns_batch)
+                for images_names_batch in sly.batched(images_names, batch_size=batch_size):
+                    images_path_batch = [
+                        os.path.join(curr_images_path, image_name)
+                        for image_name in images_names_batch
+                    ]
 
-                progress.iters_done_report(len(images_path_batch))
+                    images_names_batch = [
+                        im_path.split("/")[-2] + "_" + get_file_name_with_ext(im_path)
+                        for im_path in images_path_batch
+                    ]
+
+                    img_infos = api.image.upload_paths(
+                        dataset.id, images_names_batch, images_path_batch
+                    )
+                    img_ids = [im_info.id for im_info in img_infos]
+
+                    anns_batch = [create_ann(image_path) for image_path in images_path_batch]
+                    api.annotation.upload_anns(img_ids, anns_batch)
+
+                    progress.iters_done_report(len(images_path_batch))
     return project
