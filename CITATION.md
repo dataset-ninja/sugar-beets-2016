@@ -10,4 +10,4 @@ If you make use of the Sugar Beets 2016 data, please cite the following referenc
 }
 ```
 
-[🔗 Source](https://www.ipb.uni-bonn.de/data/sugarbeets2016/)
+[Source](https://www.ipb.uni-bonn.de/data/sugarbeets2016/)
