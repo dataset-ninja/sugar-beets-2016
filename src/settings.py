@@ -21,10 +21,10 @@ HIDE_DATASET = True  # set False when 100% sure about repo quality
 # * After uploading to instance ##
 ##################################
 LICENSE: License = License.CC_BY_SA_4_0()
-APPLICATIONS: List[Union[Industry, Domain, Research]] = [Industry.Agricultural()]
+APPLICATIONS: List[Union[Industry, Domain, Research]] = [Industry.Agricultural(), Industry.Robotics()]
 CATEGORY: Category = Category.Agriculture(extra=Category.Robotics())
 
-CV_TASKS: List[CVTask] = [CVTask.SemanticSegmentation(), CVTask.InstanceSegmentation()]
+CV_TASKS: List[CVTask] = [CVTask.InstanceSegmentation(), CVTask.SemanticSegmentation(), CVTask.ObjectDetection()]
 ANNOTATION_TYPES: List[AnnotationType] = [AnnotationType.InstanceSegmentation()]
 
 RELEASE_DATE: Optional[str] = None  # e.g. "YYYY-MM-DD"
@@ -34,7 +34,7 @@ if RELEASE_DATE is None:
 HOMEPAGE_URL: str = "https://www.ipb.uni-bonn.de/data/sugarbeets2016/"
 # e.g. "https://some.com/dataset/homepage"
 
-PREVIEW_IMAGE_ID: int = 4279302
+PREVIEW_IMAGE_ID: int = 4690401
 # This should be filled AFTER uploading images to instance, just ID of any image.
 
 GITHUB_URL: str = "https://github.com/dataset-ninja/sugar-beets-2016"
@@ -54,9 +54,12 @@ PAPER: Optional[
     Union[str, List[str]]
 ] = "https://journals.sagepub.com/doi/full/10.1177/0278364917720510"
 BLOGPOST: Optional[Union[str, List[str], Dict[str, str]]] = None
-REPOSITORY: Optional[Union[str, List[str], Dict[str, str]]] = None
+REPOSITORY: Optional[Union[str, List[str], Dict[str, str]]] = {
+    'Software Tools' : "https://github.com/PRBonn/pybonirob",
+    "Repository": "https://www.ipb.uni-bonn.de/datasets_IJRR2017/"
+}
 
-CITATION_URL: Optional[str] = None
+CITATION_URL: Optional[str] = "https://www.ipb.uni-bonn.de/data/sugarbeets2016/"
 AUTHORS: Optional[List[str]] = [
     "Nived Chebrolu",
     "Philipp Lottes",
@@ -75,7 +78,9 @@ ORGANIZATION_URL: Optional[Union[str, List[str]]] = [
     "https://uni-freiburg.de/en/",
 ]
 
-SLYTAGSPLIT: Optional[Dict[str, List[str]]] = None
+SLYTAGSPLIT: Optional[Dict[str, List[str]]] = {
+    "__PRETEXT__":"Additionally, every image contains information about ***im_id***, ***location*** and ***date***"
+}
 TAGS: Optional[List[str]] = None
 
 ##################################

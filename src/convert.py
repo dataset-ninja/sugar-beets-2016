@@ -71,13 +71,13 @@ def convert_and_upload_supervisely_project(
     api: sly.Api, workspace_id: int, project_name: str
 ) -> sly.ProjectInfo:
     # project_name = "Sugar Beets 2016"
-    dataset_path = "/mnt/d/datasetninja-raw/sugar-beets-2016/ijrr_sugarbeets_2016_annotations/ijrr_sugarbeets_2016_annotations"
+    dataset_path = "/home/grokhi/rawdata/sugar-beets-2016/ijrr_sugarbeets_2016_annotations" 
 
     images_subpath = "images/rgb"
     nir_subpath = "images/nir"
     masks_subpath = "annotations/dlp/colorCleaned"
     images_shape = (1296, 966)
-    batch_size = 30
+    batch_size = 100
     ds_name = "ds"
     group_tag_name = "im_id"
 

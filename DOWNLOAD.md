@@ -1,6 +1,6 @@
-Dataset **Sugar Beets 2016** can be downloaded in Supervisely format:
+Dataset **Sugar Beets 2016** can be downloaded in [Supervisely format](https://developer.supervisely.com/api-references/supervisely-annotation-json-format):
 
- [Download](https://assets.supervisely.com/supervisely-supervisely-assets-public/teams_storage/m/A/de/UbsRTdrNff2YVueoC4x0TcD8xiQUL87RDahC1TvprTMSCZgYppWgOuUJKqrhpzTO0s06eMYM7EQpfOtQ7weMJjITy8G6iZFraPEGFPRDBH8PXOB9svvbLWzm8rzB.tar)
+ [Download](Set 'HIDE_DATASET=False' to generate download link)
 
 As an alternative, it can be downloaded with *dataset-tools* package:
 ``` bash
@@ -11,6 +11,8 @@ pip install --upgrade dataset-tools
 ``` python
 import dataset_tools as dtools
 
-dtools.download(dataset='Sugar Beets 2016', dst_path='~/dtools/datasets/Sugar Beets 2016.tar')
+dtools.download(dataset='Sugar Beets 2016', dst_dir='~/dataset-ninja/')
 ```
-The data in original format can be 🔗[downloaded here](https://www.ipb.uni-bonn.de/datasets_IJRR2017)
+Make sure not to overlook the [python code example](https://developer.supervisely.com/getting-started/python-sdk-tutorials/iterate-over-a-local-project) available on the Supervisely Developer Portal. It will give you a clear idea of how to effortlessly work with the downloaded dataset.
+
+The data in original format can be [downloaded here](https://www.ipb.uni-bonn.de/datasets_IJRR2017).
