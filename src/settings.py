@@ -15,7 +15,7 @@ from dataset_tools.templates import (
 ##################################
 PROJECT_NAME: str = "Sugar Beets 2016"
 PROJECT_NAME_FULL: str = "Sugar Beets 2016: Agricultural Robot Dataset for Plant Classification, Localization and Mapping on Sugar Beet Fields"
-HIDE_DATASET = True  # set False when 100% sure about repo quality
+HIDE_DATASET = False  # set False when 100% sure about repo quality
 
 ##################################
 # * After uploading to instance ##
@@ -79,7 +79,7 @@ ORGANIZATION_URL: Optional[Union[str, List[str]]] = [
 ]
 
 SLYTAGSPLIT: Optional[Dict[str, List[str]]] = {
-    "__PRETEXT__":"Additionally, every image contains information about ***im_id***, ***location*** and ***date***"
+    "__PRETEXT__": "Additionally, every image contains information about ***im_id***, ***location*** and ***date***"
 }
 TAGS: Optional[List[str]] = None
 
