@@ -55,7 +55,7 @@ PAPER: Optional[
 ] = "https://journals.sagepub.com/doi/full/10.1177/0278364917720510"
 BLOGPOST: Optional[Union[str, List[str], Dict[str, str]]] = None
 REPOSITORY: Optional[Union[str, List[str], Dict[str, str]]] = {
-    'Software Tools' : "https://github.com/PRBonn/pybonirob",
+    'Software Tools': "https://github.com/PRBonn/pybonirob",
     "Repository": "https://www.ipb.uni-bonn.de/datasets_IJRR2017/"
 }
 
@@ -68,6 +68,7 @@ AUTHORS: Optional[List[str]] = [
     "Wolfram Burgard",
     "Cyrill Stachniss",
 ]
+AUTHORS_CONTACTS: Optional[List[str]] = ["photogrammetry@uni-bonn.de"]
 
 ORGANIZATION_NAME: Optional[Union[str, List[str]]] = [
     "University of Bonn, Germany",
@@ -125,6 +126,7 @@ def get_settings():
     settings["repository"] = REPOSITORY
     settings["citation_url"] = CITATION_URL
     settings["authors"] = AUTHORS
+    settings["authors_contacts"] = AUTHORS_CONTACTS
     settings["organization_name"] = ORGANIZATION_NAME
     settings["organization_url"] = ORGANIZATION_URL
     settings["slytagsplit"] = SLYTAGSPLIT
