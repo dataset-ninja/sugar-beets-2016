@@ -1,6 +1,6 @@
 Dataset **Sugar Beets 2016** can be downloaded in [Supervisely format](https://developer.supervisely.com/api-references/supervisely-annotation-json-format):
 
- [Download](https://assets.supervisely.com/supervisely-supervisely-assets-public/teams_storage/h/Q/SL/lARCTeLeACLodDVhpOlf9b2xEcREQq2msZ6XCBpmexxZcg2PGMjDIbh97IqJzjj1U6a1Am4gEp763e73RZoHr0ZTr7atMih1MLosXPLmsoMsYO4uIkjRDRi3q2fT.tar)
+ [Download](https://www.dropbox.com/scl/fi/fw8tfq3chjj0ily0fo1v7/sugar-beets-2016-DatasetNinja.tar?rlkey=etb81t5icn58imhvhp41t4434&dl=1)
 
 As an alternative, it can be downloaded with *dataset-tools* package:
 ``` bash
