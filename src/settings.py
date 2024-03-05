@@ -82,7 +82,7 @@ ORGANIZATION_URL: Optional[Union[str, List[str]]] = [
 SLYTAGSPLIT: Optional[Dict[str, List[str]]] = {
     "__PRETEXT__": "Additionally, every image contains information about ***im_id***, ***location*** and ***date***"
 }
-TAGS: Optional[List[str]] = None
+TAGS: Optional[List[str]] = ['multi-view']
 
 ##################################
 ###### ? Checks. Do not edit #####
